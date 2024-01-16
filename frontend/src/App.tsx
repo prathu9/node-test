@@ -1,34 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useEffect, useState } from 'react';
+import Sun from "./assets/sun.svg?react";
+import Moon from "./assets/moon.svg?react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [colorTheme, setColorTheme] = useState<"light"|"dark">("dark");
+
+  useEffect(() => {
+    const storedColorTheme = localStorage.getItem('color-theme') as "light" | "dark";
+    if(storedColorTheme){
+      setColorTheme(storedColorTheme);
+    }
+  },[])
+
+  const handleColorThemeChange = (currentThemeColor: "light"|"dark") => {
+      setColorTheme(currentThemeColor);
+      localStorage.setItem("color-theme",currentThemeColor);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className={`${colorTheme} app w-100 h-full`}>
+      <div className={`dark:bg-black text-content h-full`}>
+      <header className='flex justify-between px-4 py-2 h-40'>
+        <div></div>
+        <div className='w-12 cursor-pointer'>
+          {
+            colorTheme === "dark"?
+            <Sun onClick={() => handleColorThemeChange("light")}/>:
+            <Moon onClick={() => handleColorThemeChange("dark")}/>
+          }
+        </div>
+      </header>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
