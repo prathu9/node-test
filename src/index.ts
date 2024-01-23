@@ -1,4 +1,4 @@
-import express, { urlencoded } from 'express';
+import express from 'express';
 import apiRoute from "./routes/api";
 import 'dotenv/config'
 
